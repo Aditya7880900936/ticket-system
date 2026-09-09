@@ -9,6 +9,7 @@ import (
 	"ticket-system/internal/database"
 	"ticket-system/internal/handlers"
 	"ticket-system/internal/middleware"
+	"ticket-system/internal/repository"
 )
 
 func main() {
@@ -29,10 +30,16 @@ func main() {
 	router.POST("/auth/register", authHandler.Register)
 	router.POST("/auth/login", authHandler.Login)
 
+	ticketRepository := repository.NewTicketRepository(db)
+	ticketHandler := handlers.NewTicketHandler(ticketRepository)
+
 	protected := router.Group("/tickets")
 	protected.Use(middleware.JWTAuth(cfg))
 
-	// Ticket routes will be added here.
+	protected.POST("", ticketHandler.Create)
+	protected.GET("", ticketHandler.List)
+	protected.GET("/:id", ticketHandler.GetByID)
+	protected.PATCH("/:id/status", ticketHandler.UpdateStatus)
 
 	router.Run(":" + cfg.Port)
 }
