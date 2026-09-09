@@ -23,6 +23,7 @@ func main() {
 	router.Use(cors.New(cors.Config{
 		AllowOrigins: []string{
 			"http://localhost:3000",
+			"https://ticket-system-frontend-9rf1.onrender.com",
 		},
 		AllowMethods: []string{
 			"GET",
