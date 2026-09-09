@@ -7,12 +7,14 @@ import (
 
 	"ticket-system/internal/config"
 	"ticket-system/internal/database"
+	"ticket-system/internal/handlers"
+	"ticket-system/internal/middleware"
 )
 
 func main() {
 	cfg := config.Load()
 
-	database.Connect(cfg)
+	db := database.Connect(cfg)
 
 	router := gin.Default()
 
@@ -21,6 +23,16 @@ func main() {
 			"status": "ok",
 		})
 	})
+
+	authHandler := handlers.NewAuthHandler(db, cfg)
+
+	router.POST("/auth/register", authHandler.Register)
+	router.POST("/auth/login", authHandler.Login)
+
+	protected := router.Group("/tickets")
+	protected.Use(middleware.JWTAuth(cfg))
+
+	// Ticket routes will be added here.
 
 	router.Run(":" + cfg.Port)
 }
