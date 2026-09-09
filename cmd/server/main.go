@@ -4,9 +4,16 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+	"ticket-system/internal/config"
+	"ticket-system/internal/database"
 )
 
 func main() {
+	cfg := config.Load()
+
+	database.Connect(cfg)
+
 	router := gin.Default()
 
 	router.GET("/health", func(c *gin.Context) {
@@ -15,5 +22,5 @@ func main() {
 		})
 	})
 
-	router.Run(":8080")
+	router.Run(":" + cfg.Port)
 }
