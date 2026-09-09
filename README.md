@@ -315,19 +315,21 @@ Render
 Deployed URL:
 
 ```text
-TODO: Add deployed URL after deployment
+https://ticket-system-6mmn.onrender.com
 ```
 
 Health endpoint:
 
 ```text
-TODO: Add deployed health URL after deployment
+https://ticket-system-6mmn.onrender.com/health
 ```
 
-Example:
+The deployed health endpoint returns:
 
-```text
-https://your-app.onrender.com/health
+```json
+{
+  "status": "ok"
+}
 ```
 
 ## Database
