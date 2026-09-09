@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 
 	"ticket-system/internal/config"
+	"ticket-system/internal/models"
 )
 
 func Connect(cfg *config.Config) *gorm.DB {
@@ -26,6 +27,15 @@ func Connect(cfg *config.Config) *gorm.DB {
 	}
 
 	log.Println("Database connected successfully")
+
+	if err := db.AutoMigrate(
+		&models.User{},
+		&models.Ticket{},
+	); err != nil {
+		log.Fatalf("failed to migrate database: %v", err)
+	}
+
+	log.Println("Database migration completed")
 
 	return db
 }
